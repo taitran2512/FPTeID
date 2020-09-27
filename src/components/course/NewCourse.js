@@ -23,6 +23,8 @@ export default class NewCourse extends React.Component {
          endedDate: '',
          buildingId: '',
          roomId: '',
+
+         errorInput: false,
       };
    }
    //Get tòa nhà vào array và truyền vào dropdown
@@ -118,9 +120,23 @@ export default class NewCourse extends React.Component {
    };
    //valid date
    betweenDate() {
-      return new Date(this.state.endedDate).getDay() - new Date(this.state.startedDate).getDay();
+      return (
+         new Date(this.state.endedDate.split('-').reverse().join('/')).getDay() -
+         new Date(this.state.startedDate.split('-').reverse().join('/')).getDay()
+      );
    }
-
+   showErrorText = (value, message) => {
+      if (this.state.errorInput && stringIsEmpty(value)) {
+         return <Text style={{ color: 'red' }}>{message}</Text>;
+      } else {
+         return null;
+      }
+   };
+   showErrorBorder = (value) => {
+      if (this.state.errorInput && stringIsEmpty(value)) {
+         return { borderColor: 'red' };
+      }
+   };
    onPressSaveButton = () => {
       if (
          stringIsEmpty(this.state.courseName) ||
@@ -130,21 +146,22 @@ export default class NewCourse extends React.Component {
          stringIsEmpty(this.state.buildingId) ||
          stringIsEmpty(this.state.roomId)
       ) {
-         alert('Vui lòng nhập đầy đủ thông tin');
-      } else {
-         if (this.betweenDate() < 0) {
-            alert('Ngày tháng không hợp lệ');
-         } else {
-            this.props.createCourseAction(
-               this.state.courseName,
-               this.state.trainer,
-               this.state.startedDate.split('-').reverse().join('-'),
-               this.state.endedDate.split('-').reverse().join('-'),
-               this.state.buildingId,
-               this.state.roomId,
-            );
-         }
+         this.setState({ errorInput: true });
       }
+      // else {
+      //    if (this.betweenDate() < 0) {
+      //       alert('Ngày tháng không hợp lệ');
+      //    } else {
+      //       this.props.createCourseAction(
+      //          this.state.courseName,
+      //          this.state.trainer,
+      //          this.state.startedDate.split('-').reverse().join('-'),
+      //          this.state.endedDate.split('-').reverse().join('-'),
+      //          this.state.buildingId,
+      //          this.state.roomId,
+      //       );
+      //    }
+      // }
    };
    render() {
       return (
@@ -156,71 +173,87 @@ export default class NewCourse extends React.Component {
             <ScrollView style={{ flex: 1 }} contentContainerStyle={{ flexGrow: 1 }}>
                {/* /////Tên Khóa/////////////////		 */}
                <View style={styles.container}>
-                  <Text style={styles.textstyle}>Tên khóa</Text>
+                  <Text style={styles.textstyle}>
+                     Tên khóa <Text style={{ color: 'red' }}>*</Text>
+                  </Text>
                   <TextInput
-                     style={styles.textInput}
+                     style={[styles.textInput, this.showErrorBorder(this.state.courseName)]}
                      placeholder="Nhập tên khóa học"
                      onChangeText={this.handleChangecourseName}
                      value={this.state.courseName}
                   />
+                  {this.showErrorText(this.state.courseName, 'Vui lòng nhập tên khóa')}
                   {/* /////Giảng viên///////////////		 */}
-                  <Text style={styles.textstyle}>Giảng viên</Text>
+                  <Text style={styles.textstyle}>
+                     Giảng viên <Text style={{ color: 'red' }}>*</Text>
+                  </Text>
                   <TextInput
-                     style={styles.textInput}
+                     style={[styles.textInput, this.showErrorBorder(this.state.courseName)]}
                      placeholder="Nhập tên giảng viên"
                      onChangeText={this.handleChangetrainer}
                      value={this.state.trainer}
                   />
+                  {this.showErrorText(this.state.courseName, 'Vui lòng nhập tên giảng viên')}
+
                   {/* //////////////////////		 */}
                   <View style={[styles.column, { justifyContent: 'space-between' }]}>
-                     <Text style={[styles.textstyle, { width: '48%' }]}>Từ ngày</Text>
-                     <Text style={[styles.textstyle, { width: '48%' }]}>Đến ngày</Text>
+                     <Text style={[styles.textstyle, { width: '48%' }]}>
+                        Từ ngày <Text style={{ color: 'red' }}>*</Text>
+                     </Text>
+                     <Text style={[styles.textstyle, { width: '48%' }]}>
+                        Đến ngày <Text style={{ color: 'red' }}>*</Text>
+                     </Text>
                   </View>
                   {/* ////Date picker  //////////////////////////////////////////////////////////////////////////*/}
-                  <View style={[styles.column, { justifyContent: 'space-between', marginRight:Sizes.s10 }]}>
+                  <View style={[styles.column, { justifyContent: 'space-between', marginRight: Sizes.s10 }]}>
                      {/* ////start date////////////////////// */}
-                        <DatePicker
-                           style={{ width: '48%' }}
-                           date={this.state.startedDate}
-									mode="date"
-                           format="DD-MM-YYYY"
-                           placeholder="Select date"
-                           minDate={new Date()}
-                           confirmBtnText="Confirm"
-									cancelBtnText="Cancel"
-                           iconComponent={<Icon name="angle-down" size={Sizes.s30} style={{marginLeft:-Sizes.s30}}/>}
-                           customStyles={{
-                              dateInput: styles.dateInput,
-                              dateText: styles.textDate,
-                           }}
-                           onDateChange={(date) => {
-                              this.handleChangestartedDate(date);
-                           }}
-                        />
+                     <DatePicker
+                        style={{ width: '48%' }}
+                        date={this.state.startedDate}
+                        mode="date"
+                        format="DD-MM-YYYY"
+                        placeholder="Select date"
+                        minDate={new Date()}
+                        confirmBtnText="Confirm"
+                        cancelBtnText="Cancel"
+                        iconComponent={
+                           <Icon name="angle-down" size={Sizes.s30} style={{ marginLeft: -Sizes.s30 }} />
+                        }
+                        customStyles={{
+                           dateInput: styles.dateInput,
+                           dateText: styles.textDate,
+                        }}
+                        onDateChange={(date) => {
+                           this.handleChangestartedDate(date);
+                        }}
+                     />
                      {/* ////endate////////////////////// */}
-                        <DatePicker
-                           style={{ width: '48%' }}
-                           date={this.state.endedDate}
-									mode="date"
-									// showIcon={false}
-                           format="DD-MM-YYYY"
-                           placeholder="Select date"
-                           minDate={new Date()}
-                           confirmBtnText="Confirm"
-									cancelBtnText="Cancel"
-                           iconComponent={<Icon name="angle-down" size={Sizes.s30} style={{marginLeft:-Sizes.s30}}/>}
-                           customStyles={{               
-                              dateInput: styles.dateInput,
-                              dateText: styles.textDate,
-                           }}
-                           onDateChange={(date) => {
-                              this.handleChangeendedDate(date);
-                           }}
-                        />
+                     <DatePicker
+                        style={{ width: '48%' }}
+                        date={this.state.endedDate}
+                        mode="date"
+                        format="DD-MM-YYYY"
+                        placeholder="Select date"
+                        minDate={new Date()}
+                        confirmBtnText="Confirm"
+                        cancelBtnText="Cancel"
+                        iconComponent={
+                           <Icon name="angle-down" size={Sizes.s30} style={{ marginLeft: -Sizes.s30 }} />
+                        }
+                        customStyles={{
+                           dateInput: styles.dateInput,
+                           dateText: styles.textDate,
+                        }}
+                        onDateChange={(date) => {
+                           this.handleChangeendedDate(date);
+                        }}
+                     />
                   </View>
 
                   {/* /////Tòa nhà/////////////////		 */}
-                  <Text style={styles.textstyle}>Tòa nhà</Text>
+                  <Text style={styles.textstyle}>
+                     Tòa nhà <Text style={{ color: 'red' }}>*</Text>
+                  </Text>
                   <DropDownPicker
                      items={this.state.dataBuilding}
                      onChangeItem={(item) => {
@@ -236,7 +269,9 @@ export default class NewCourse extends React.Component {
                   />
 
                   {/* /////Phòng/////////////////		 */}
-                  <Text style={styles.textstyle}>Phòng</Text>
+                  <Text style={styles.textstyle}>
+                     Phòng <Text style={{ color: 'red' }}>*</Text>
+                  </Text>
                   <DropDownPicker
                      items={this.state.dataRoom}
                      onChangeItem={(item) => {
@@ -298,11 +333,12 @@ const styles = StyleSheet.create({
       borderColor: '#D7DDE3',
       borderWidth: 1,
       height: Sizes.s90,
+      paddingHorizontal: Sizes.s15,
    },
    viewDateInput: {
-		backgroundColor: 'red'
-		// width:'50%'
-	},
+      backgroundColor: 'red',
+      // width:'50%'
+   },
    dateInput: {
       height: Sizes.s80,
       width: '80%',

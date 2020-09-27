@@ -117,20 +117,20 @@ export default class Login extends React.Component {
                      />
                   </View>
                   {/* ////////checkbox/////////////////////////// */}
-                  <View style={styles.checkContainer}>
-                     <TouchableOpacity
-                        activeOpacity={0.5}
-                        onPress={() => {
-                           if (this.state.check === 'circle') {
-                              this.setState({ check: 'check-circle' });
-                           } else {
-                              this.setState({ check: 'circle' });
-                           }
-                        }}>
-                        <Icon name={this.state.check} size={20} color="#fb9334" style={{ marginTop: 2 }} />
-                     </TouchableOpacity>
+                  <TouchableOpacity
+                     style={styles.checkContainer}
+                     activeOpacity={0.5}
+                     onPress={() => {
+                        if (this.state.check === 'circle') {
+                           this.setState({ check: 'check-circle' });
+                        } else {
+                           this.setState({ check: 'circle' });
+                        }
+                     }}>
+                     <Icon name={this.state.check} size={20} color="#fb9334" style={{ marginTop: 2 }} />
                      <Text style={styles.textstyle3}>Ghi nhớ đăng nhập</Text>
-                  </View>
+                  </TouchableOpacity>
+
                   {/* ////////button login/////////////////////// */}
                   <TouchableOpacity
                      activeOpacity={0.5}

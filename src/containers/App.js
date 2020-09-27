@@ -14,10 +14,6 @@ const TabNavigator = createBottomTabNavigator({
    Home: Home,
    Home2: Home2,
 });
-import React, { Component } from 'react';
-
-
-export default App;
 const TAB = createAppContainer(TabNavigator);
 
 const RootStack = createStackNavigator(
