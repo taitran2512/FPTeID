@@ -1,14 +1,12 @@
-import { Button } from 'react-native-elements';
 import { objectIsNull, arrayIsEmpty, stringIsEmpty } from '@dungdang/react-native-basic/src/Functions';
-import { View, Text, TextInput, StyleSheet, Alert } from 'react-native';
+import { View, Text, TextInput, StyleSheet, Alert, ScrollView } from 'react-native';
 import DatePicker from 'react-native-datepicker';
-import DropDownPicker from 'react-native-dropdown-picker';
 import React from 'react';
 
 import Header from '../../custom/Header';
 import { Sizes } from '@dungdang/react-native-basic';
-import { ScrollView } from 'react-native-gesture-handler';
 import Icon from 'react-native-vector-icons/FontAwesome';
+import { TouchableOpacity } from 'react-native-gesture-handler';
 
 export default class NewCourse extends React.Component {
    constructor(props) {
@@ -260,7 +258,7 @@ export default class NewCourse extends React.Component {
                   <Text style={styles.textstyle}>
                      Tòa nhà <Text style={{ color: 'red' }}>*</Text>
                   </Text>
-                  <DropDownPicker
+                  {/* <DropDownPicker
                      items={this.state.dataBuilding}
                      onChangeItem={(item) => {
                         this.handleChangebuildingId(item.label, item.value);
@@ -272,47 +270,26 @@ export default class NewCourse extends React.Component {
                         marginTop: Sizes.s15,
                         marginBottom: Sizes.s15,
                      }}
-                  />
+                  /> */}
 
                   {/* /////Phòng/////////////////		 */}
                   <Text style={styles.textstyle}>
                      Phòng <Text style={{ color: 'red' }}>*</Text>
                   </Text>
-                  <DropDownPicker
-                     items={this.state.dataRoom}
-                     onChangeItem={(item) => {
-                        this.handleChangeroomId(item.value);
-                     }}
-                     labelStyle={styles.textDate}
-                     style={{ borderColor: '#D7DDE3', borderRadius: Sizes.s7 }}
-                     containerStyle={{
-                        height: Sizes.s90,
-                        marginTop: Sizes.s15,
-                        marginBottom: Sizes.s15,
-                     }}
-                  />
+                  
                   {/* /////button Lưu/////////////////		 */}
-                  <View
-                     style={{
-                        alignSelf: 'flex-end',
-                        width: '40%',
-                     }}>
-                     <Button
-                        icon={{
-                           name: 'save',
-                           size: Sizes.s40,
+                  <TouchableOpacity style={styles.button}>
+                     <Icon solid={true} name="save" color="white" size={Sizes.s35} />
+                     <Text
+                        style={{
+                           marginLeft: Sizes.s10,
                            color: 'white',
-                        }}
-                        title="LƯU"
-                        buttonStyle={{
-                           marginTop: Sizes.s25,
-                           backgroundColor: '#fb9334',
-                           width: '100%',
-                           borderRadius: Sizes.s10,
-                        }}
-                        onPress={this.onPressSaveButton}
-                     />
-                  </View>
+                           fontWeight: 'bold',
+                           fontSize: Sizes.s35,
+                        }}>
+                        LƯU
+                     </Text>
+                  </TouchableOpacity>
                </View>
             </ScrollView>
          </View>
@@ -358,7 +335,16 @@ const styles = StyleSheet.create({
    column: {
       marginBottom: Sizes.s15,
       flexDirection: 'row',
-      // flexWrap: 'wrap',
-      // alignItems: 'flex-start',
+   },
+   button: {
+      flexDirection: 'row',
+      alignItems: 'center',
+      justifyContent: 'center',
+      alignSelf: 'flex-end',
+      width: '40%',
+      backgroundColor: '#fb9334',
+      borderRadius: Sizes.s10,
+      marginVertical: Sizes.s25,
+      paddingVertical: Sizes.s20,
    },
 });
