@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import { Button, Image, View, Text, TextInput, StyleSheet, ScrollView } from 'react-native';
+import { Button, Image, View, Text, TextInput, StyleSheet, ScrollView, AsyncStorage } from 'react-native';
 import { SafeAreaView } from 'react-navigation';
 import Icon from 'react-native-vector-icons/FontAwesome5';
 import { Sizes } from '@dungdang/react-native-basic';
@@ -18,24 +18,68 @@ export default class Login extends React.Component {
          pressLogin: false,
       };
    }
-   handleChangeUsername = (username) => {
-      this.setState({ username: username });
-   };
-   handleChangePassword = (password) => {
-      this.setState({ password: password });
-   };
+   componentDidMount() {
+      this._retrieveData();
+   }
+
    componentDidUpdate(prevProps) {
       if (prevProps.loginReduces !== this.props.loginReduces) {
          if (this.props.loginReduces.resultCode == 1) {
+            this.state.check == 'circle'
+               ? (this._removeKey(), this.setState({ username: '', password: '' }))
+               : null;
             this.props.navigation.navigate('ManageCourse');
          } else if (this.props.loginReduces.resultCode == -1) {
             alert(this.props.loginReduces.message);
          }
       }
    }
+
+   handleChangeUsername = (username) => {
+      this.setState({ username: username });
+   };
+   handleChangePassword = (password) => {
+      this.setState({ password: password });
+   };
+
    _onPressLogin() {
+      this.state.check == 'circle' ? this._removeKey() : this._storeData();
       this.props.loginAction(this.state.username, this.state.password);
    }
+   _storeData = async () => {
+      try {
+         await AsyncStorage.setItem('username', this.state.username);
+         await AsyncStorage.setItem('password', this.state.password);
+      } catch (error) {
+         // Error saving data
+      }
+   };
+
+   _removeKey = async () => {
+      try {
+         await AsyncStorage.removeItem('username');
+         await AsyncStorage.removeItem('password');
+      } catch (error) {
+         this.setState({ username: '', password: '' });
+      }
+   };
+   _retrieveData = async () => {
+      try {
+         const value1 = await AsyncStorage.getItem('username');
+         const value2 = await AsyncStorage.getItem('password');
+
+         if (value1 !== null) {
+            // alert(value1)
+            this.setState({
+               username: value1,
+               password: value2,
+               check: 'check-circle',
+            });
+         }
+      } catch (error) {
+         this.setState({ username: '', password: '' });
+      }
+   };
    render() {
       const { username, password } = this.state;
       return (
@@ -155,6 +199,7 @@ export default class Login extends React.Component {
 const styles = StyleSheet.create({
    container: {
       flex: 1,
+      paddingVertical: Sizes.s15,
       // backgroundColor: '#f4f8fb',
       // backgroundColor: 'red',
       justifyContent: 'center',

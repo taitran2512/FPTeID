@@ -207,26 +207,29 @@ export default class NewCourse extends React.Component {
                   {/* ////Date picker  //////////////////////////////////////////////////////////////////////////*/}
                   <View style={[styles.column, { justifyContent: 'space-between', marginRight: Sizes.s10 }]}>
                      {/* ////start date////////////////////// */}
-                     <DatePicker
-                        style={{ width: '48%' }}
-                        date={this.state.startedDate}
-                        mode="date"
-                        format="DD-MM-YYYY"
-                        placeholder="Select date"
-                        minDate={new Date()}
-                        confirmBtnText="Confirm"
-                        cancelBtnText="Cancel"
-                        iconComponent={
-                           <Icon name="angle-down" size={Sizes.s30} style={{ marginLeft: -Sizes.s30 }} />
-                        }
-                        customStyles={{
-                           dateInput: styles.dateInput,
-                           dateText: styles.textDate,
-                        }}
-                        onDateChange={(date) => {
-                           this.handleChangestartedDate(date);
-                        }}
-                     />
+                     <View style={styles.date}>
+                        <DatePicker
+                           style={{ width: '48%' }}
+                           date={this.state.startedDate}
+                           mode="date"
+                           format="DD-MM-YYYY"
+                           placeholder="Select date"
+                           minDate={new Date()}
+                           confirmBtnText="Confirm"
+                           cancelBtnText="Cancel"
+                           iconComponent={
+                              <Icon name="angle-down" size={Sizes.s30} style={{ marginLeft: -Sizes.s30 }} />
+                           }
+                           customStyles={{
+                              dateInput: styles.dateInput,
+                              dateText: styles.textDate,
+                           }}
+                           onDateChange={(date) => {
+                              this.handleChangestartedDate(date);
+                           }}
+                        />
+                        {this.showErrorText(this.state.startedDate, 'Vui lòng nhập ngày bắt đầu')}
+                     </View>
                      {/* ////endate////////////////////// */}
                      <DatePicker
                         style={{ width: '48%' }}
@@ -338,6 +341,9 @@ const styles = StyleSheet.create({
    viewDateInput: {
       backgroundColor: 'red',
       // width:'50%'
+   },
+   date: {
+      width: '98%',
    },
    dateInput: {
       height: Sizes.s80,
