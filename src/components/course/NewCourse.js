@@ -1,6 +1,6 @@
 import { Button } from 'react-native-elements';
 import { objectIsNull, arrayIsEmpty, stringIsEmpty } from '@dungdang/react-native-basic/src/Functions';
-import { View, Text, TextInput, StyleSheet } from 'react-native';
+import { View, Text, TextInput, StyleSheet, Alert } from 'react-native';
 import DatePicker from 'react-native-datepicker';
 import DropDownPicker from 'react-native-dropdown-picker';
 import React from 'react';
@@ -147,21 +147,21 @@ export default class NewCourse extends React.Component {
          stringIsEmpty(this.state.roomId)
       ) {
          this.setState({ errorInput: true });
+      } else {
+         if (this.betweenDate() < 0) {
+            Alert.alert('Thông báo', 'Ngày tháng không hợp lệ');
+         } else {
+            this.setState({ errorInput: false });
+            this.props.createCourseAction(
+               this.state.courseName,
+               this.state.trainer,
+               this.state.startedDate.split('-').reverse().join('-'),
+               this.state.endedDate.split('-').reverse().join('-'),
+               this.state.buildingId,
+               this.state.roomId,
+            );
+         }
       }
-      // else {
-      //    if (this.betweenDate() < 0) {
-      //       alert('Ngày tháng không hợp lệ');
-      //    } else {
-      //       this.props.createCourseAction(
-      //          this.state.courseName,
-      //          this.state.trainer,
-      //          this.state.startedDate.split('-').reverse().join('-'),
-      //          this.state.endedDate.split('-').reverse().join('-'),
-      //          this.state.buildingId,
-      //          this.state.roomId,
-      //       );
-      //    }
-      // }
    };
    render() {
       return (
@@ -209,11 +209,11 @@ export default class NewCourse extends React.Component {
                      {/* ////start date////////////////////// */}
                      <View style={styles.date}>
                         <DatePicker
-                           style={{ width: '48%' }}
+                           style={{ width: '100%' }}
                            date={this.state.startedDate}
                            mode="date"
                            format="DD-MM-YYYY"
-                           placeholder="Select date"
+                           placeholder="Chọn ngày bắt đầu"
                            minDate={new Date()}
                            confirmBtnText="Confirm"
                            cancelBtnText="Cancel"
@@ -221,7 +221,7 @@ export default class NewCourse extends React.Component {
                               <Icon name="angle-down" size={Sizes.s30} style={{ marginLeft: -Sizes.s30 }} />
                            }
                            customStyles={{
-                              dateInput: styles.dateInput,
+                              dateInput: [styles.dateInput, this.showErrorBorder(this.state.startedDate)],
                               dateText: styles.textDate,
                            }}
                            onDateChange={(date) => {
@@ -231,26 +231,29 @@ export default class NewCourse extends React.Component {
                         {this.showErrorText(this.state.startedDate, 'Vui lòng nhập ngày bắt đầu')}
                      </View>
                      {/* ////endate////////////////////// */}
-                     <DatePicker
-                        style={{ width: '48%' }}
-                        date={this.state.endedDate}
-                        mode="date"
-                        format="DD-MM-YYYY"
-                        placeholder="Select date"
-                        minDate={new Date()}
-                        confirmBtnText="Confirm"
-                        cancelBtnText="Cancel"
-                        iconComponent={
-                           <Icon name="angle-down" size={Sizes.s30} style={{ marginLeft: -Sizes.s30 }} />
-                        }
-                        customStyles={{
-                           dateInput: styles.dateInput,
-                           dateText: styles.textDate,
-                        }}
-                        onDateChange={(date) => {
-                           this.handleChangeendedDate(date);
-                        }}
-                     />
+                     <View style={styles.date}>
+                        <DatePicker
+                           style={{ width: '100%' }}
+                           date={this.state.endedDate}
+                           mode="date"
+                           format="DD-MM-YYYY"
+                           placeholder="Chọn ngày kết thúc"
+                           minDate={new Date()}
+                           confirmBtnText="Confirm"
+                           cancelBtnText="Cancel"
+                           iconComponent={
+                              <Icon name="angle-down" size={Sizes.s30} style={{ marginLeft: -Sizes.s30 }} />
+                           }
+                           customStyles={{
+                              dateInput: [styles.dateInput, this.showErrorBorder(this.state.startedDate)],
+                              dateText: styles.textDate,
+                           }}
+                           onDateChange={(date) => {
+                              this.handleChangeendedDate(date);
+                           }}
+                        />
+                        {this.showErrorText(this.state.endedDate, 'Vui lòng nhập ngày kết thúc')}
+                     </View>
                   </View>
 
                   {/* /////Tòa nhà/////////////////		 */}
@@ -338,12 +341,8 @@ const styles = StyleSheet.create({
       height: Sizes.s90,
       paddingHorizontal: Sizes.s15,
    },
-   viewDateInput: {
-      backgroundColor: 'red',
-      // width:'50%'
-   },
    date: {
-      width: '98%',
+      width: '48%',
    },
    dateInput: {
       height: Sizes.s80,

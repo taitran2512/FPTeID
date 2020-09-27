@@ -46,7 +46,7 @@ export default class ItemCourse extends React.Component {
             </View>
 
             <View style={styles.cardrow}>
-               <Icon name="building" color="#6495ed" size={Sizes.s40} style={styles.icon} />
+               <Icon solid={true} name="building" color="#6495ed" size={Sizes.s40} style={styles.icon} />
                <Text style={styles.textSize}>
                   Tòa nhà: <Text style={styles.textBold}>{this.props.buildingName}</Text>
                </Text>
@@ -65,15 +65,15 @@ export default class ItemCourse extends React.Component {
 
 const styles = StyleSheet.create({
    title: {
-		color: '#335272',
+      color: '#335272',
       fontSize: Sizes.s40,
       paddingBottom: Sizes.s10,
       fontWeight: 'bold',
       width: '90%',
-	},
-	textSize:{
-		fontSize: Sizes.s30
-	},
+   },
+   textSize: {
+      fontSize: Sizes.s30,
+   },
    textGV: {
       fontWeight: 'bold',
       color: '#6495ed',
@@ -83,7 +83,7 @@ const styles = StyleSheet.create({
       color: 'orange',
    },
    textBold: {
-		color: '#335272',
+      color: '#335272',
       fontWeight: 'bold',
    },
    flatList: {
