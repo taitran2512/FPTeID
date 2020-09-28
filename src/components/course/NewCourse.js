@@ -7,7 +7,7 @@ import Header from '../../custom/Header';
 import { Sizes } from '@dungdang/react-native-basic';
 import Icon from 'react-native-vector-icons/FontAwesome';
 import { TouchableOpacity } from 'react-native-gesture-handler';
-
+import Picker from '../../custom/Picker';
 export default class NewCourse extends React.Component {
    constructor(props) {
       super(props);
@@ -258,6 +258,16 @@ export default class NewCourse extends React.Component {
                   <Text style={styles.textstyle}>
                      Tòa nhà <Text style={{ color: 'red' }}>*</Text>
                   </Text>
+                  <Picker
+                     style={styles.pickerStyle}
+                     title={'Tòa nhà'}
+                     placeholder={'Chọn tòa nhà'}
+                     data={this.state.dataBuilding}
+                     onChangeItem={(item) => {
+                        this.setState({ buildingId: item.value });
+                        this.dropdownRoom(item.label);
+                     }}
+                  />
                   {/* <DropDownPicker
                      items={this.state.dataBuilding}
                      onChangeItem={(item) => {
@@ -276,7 +286,15 @@ export default class NewCourse extends React.Component {
                   <Text style={styles.textstyle}>
                      Phòng <Text style={{ color: 'red' }}>*</Text>
                   </Text>
-                  
+                  <Picker
+                     style={styles.pickerStyle}
+                     title={'Phòng'}
+                     placeholder={'Chọn phòng'}
+                     data={this.state.dataRoom}
+                     onChangeItem={(item) => {
+                        this.setState({ roomId: item.value });
+                     }}
+                  />
                   {/* /////button Lưu/////////////////		 */}
                   <TouchableOpacity style={styles.button}>
                      <Icon solid={true} name="save" color="white" size={Sizes.s35} />
@@ -346,5 +364,15 @@ const styles = StyleSheet.create({
       borderRadius: Sizes.s10,
       marginVertical: Sizes.s25,
       paddingVertical: Sizes.s20,
+   },
+   pickerStyle: {
+      borderColor: '#D7DDE3',
+      borderWidth: 1,
+      height: Sizes.s90,
+      marginTop: Sizes.s10,
+      marginBottom: Sizes.s10,
+      borderRadius: Sizes.s7,
+      justifyContent: 'center',
+      paddingHorizontal: Sizes.s10,
    },
 });
