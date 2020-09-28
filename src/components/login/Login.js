@@ -110,7 +110,7 @@ export default class Login extends React.Component {
                      <TextInput
                         style={{
                            // backgroundColor: 'blue',
-                           width: '70%',
+                           width: '80%',
                            height: Sizes.s100,
                            fontSize: Sizes.s35,
                            textAlign: 'center',
@@ -134,7 +134,7 @@ export default class Login extends React.Component {
                      <TextInput
                         style={{
                            fontSize: Sizes.s35,
-                           width: '70%',
+                           width: '80%',
                            height: Sizes.s100,
                            textAlign: 'center',
                            alignSelf: 'center',
