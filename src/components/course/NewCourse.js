@@ -258,7 +258,8 @@ export default class NewCourse extends React.Component {
                      Tòa nhà <Text style={{ color: 'red' }}>*</Text>
                   </Text>
                   <Picker
-                     style={[styles.pickerStyle, this.showErrorBorder(this.state.buildingId)]}
+                     position={'flex-end'}
+                     style={this.showErrorBorder(this.state.buildingId)}
                      title={'Tòa nhà'}
                      placeholder={'Chọn tòa nhà'}
                      value={this.state.buildingId}
@@ -274,7 +275,8 @@ export default class NewCourse extends React.Component {
                      Phòng <Text style={{ color: 'red' }}>*</Text>
                   </Text>
                   <Picker
-                     style={[styles.pickerStyle, this.showErrorBorder(this.state.roomId)]}
+                     position={'flex-end'}
+                     style={this.showErrorBorder(this.state.roomId)}
                      title={'Phòng'}
                      placeholder={'Chọn phòng'}
                      value={this.state.roomId}
@@ -286,22 +288,24 @@ export default class NewCourse extends React.Component {
                   />
                   {this.showErrorText(this.state.roomId, 'Vui lòng chọn phòng')}
                   {/* /////button Lưu/////////////////		 */}
-                  <TouchableOpacity
-                     style={styles.button}
-                     onPress={() => {
-                        this.onPressSaveButton();
-                     }}>
-                     <Icon name="save" color="white" size={Sizes.s35} solid={true} />
-                     <Text
-                        style={{
-                           marginLeft: Sizes.s10,
-                           color: 'white',
-                           fontWeight: 'bold',
-                           fontSize: Sizes.s35,
+                  <View style={{ flexDirection: 'row', justifyContent: 'flex-end' }}>
+                     <TouchableOpacity
+                        style={styles.button}
+                        onPress={() => {
+                           this.onPressSaveButton();
                         }}>
-                        LƯU
-                     </Text>
-                  </TouchableOpacity>
+                        <Icon name="save" color="white" size={Sizes.s35} solid={true} />
+                        <Text
+                           style={{
+                              marginLeft: Sizes.s15,
+                              color: 'white',
+                              fontWeight: 'bold',
+                              fontSize: Sizes.s35,
+                           }}>
+                           LƯU
+                        </Text>
+                     </TouchableOpacity>
+                  </View>
                </View>
             </ScrollView>
          </View>
@@ -352,21 +356,11 @@ const styles = StyleSheet.create({
       flexDirection: 'row',
       alignItems: 'center',
       justifyContent: 'center',
-      alignSelf: 'flex-end',
-      width: '40%',
+      // alignSelf: 'center',
+      width: Sizes.s340,
       backgroundColor: '#fb9334',
       borderRadius: Sizes.s10,
       marginVertical: Sizes.s25,
       paddingVertical: Sizes.s20,
-   },
-   pickerStyle: {
-      borderColor: '#D7DDE3',
-      borderWidth: 1,
-      height: Sizes.s90,
-      marginTop: Sizes.s10,
-      marginBottom: Sizes.s10,
-      borderRadius: Sizes.s7,
-      justifyContent: 'center',
-      paddingHorizontal: Sizes.s10,
    },
 });

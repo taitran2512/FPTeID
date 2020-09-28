@@ -25,8 +25,18 @@ export default class Picker extends Component {
 
    render() {
       const { isShowModal, selectedItem } = this.state;
-      const { data, title, style, placeholder, onChangeItem, noDataMessage, value } = this.props;
-      //render item for flatList///////////////////////////////////////////////////////
+      const {
+         data,
+         title,
+         style,
+         modalStyle,
+         placeholder,
+         onChangeItem,
+         noDataMessage,
+         value,
+         position,
+      } = this.props;
+      //render item for flatList/////////////
       const renderItem = ({ item, index }) => {
          return (
             <TouchableOpacity
@@ -53,10 +63,10 @@ export default class Picker extends Component {
       return (
          <View>
             <TouchableOpacity
-               style={style}
+               style={[styles.pickerStyle, style]} //truyền style để tùy biến
                onPress={() => {
                   arrayIsEmpty(data)
-                     ? Alert.alert('Thông báo', noDataMessage)
+                     ? Alert.alert('Thông báo', noDataMessage) //báo lỗi khi data truyền vào = null hoặc []
                      : this.setState({ isShowModal: !isShowModal });
                }}>
                <View
@@ -66,6 +76,7 @@ export default class Picker extends Component {
                      alignItems: 'center',
                      paddingHorizontal: Sizes.s15,
                   }}>
+                  {/* ///thay thế place holder bằng item đã chọn//////////// */}
                   {selectedItem === null || stringIsEmpty(value) ? (
                      <Text style={{ color: '#9f9f9f' }}>{placeholder}</Text>
                   ) : (
@@ -74,7 +85,7 @@ export default class Picker extends Component {
                   <Icon name="angle-down" size={Sizes.s25} />
                </View>
             </TouchableOpacity>
-            <Modal visible={isShowModal} transparent={true} animationType="fade">
+            <Modal visible={isShowModal} transparent={true} animationType="none">
                <View
                   style={{
                      flex: 1,
@@ -87,19 +98,13 @@ export default class Picker extends Component {
                   <View
                      style={{
                         flex: 1,
-                        justifyContent: 'flex-end',
-                        // backgroundColor: '#00000036',
+                        justifyContent: position,
                      }}>
                      <TouchableWithoutFeedback>
-                        <View
-                           style={{
-                              height: '40%',
-                              borderTopRightRadius: Sizes.s40,
-                              borderTopLeftRadius: Sizes.s40,
-                              justifyContent: 'center',
-                              backgroundColor: 'white',
-                           }}>
-                           <Text style={styles.title}>{title}</Text>
+                        {/*//truyền modalStyle tùy biến cho modal */}
+                        <View style={[styles.modal, modalStyle]}>
+                           {/* //title = null sẽ không hiển thị lên modal */}
+                           {!stringIsEmpty(title) ? <Text style={styles.title}>{title}</Text> : null}
                            <FlatList
                               style={{ flex: 1 }}
                               data={data}
@@ -135,5 +140,22 @@ const styles = StyleSheet.create({
       marginHorizontal: Sizes.s30,
       borderColor: '#EFEFEF',
       borderBottomWidth: Sizes.s2 * 0.7,
+   },
+   pickerStyle: {
+      borderColor: '#D7DDE3',
+      borderWidth: 1,
+      height: Sizes.s90,
+      marginTop: Sizes.s10,
+      marginBottom: Sizes.s10,
+      borderRadius: Sizes.s7,
+      justifyContent: 'center',
+      paddingHorizontal: Sizes.s10,
+   },
+   modal: {
+      height: '40%',
+      borderTopRightRadius: Sizes.s40,
+      borderTopLeftRadius: Sizes.s40,
+      justifyContent: 'center',
+      backgroundColor: 'white',
    },
 });
