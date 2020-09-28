@@ -86,7 +86,9 @@ export default class Login extends React.Component {
          <View style={{ flex: 1, backgroundColor: '#f4f8fb' }}>
             <ScrollView style={{ flex: 1 }} contentContainerStyle={{ justifyContent: 'center', flexGrow: 1 }}>
                <View style={styles.container}>
-                  <Image style={styles.image} source={require('../../res/images/ic_fpt_is.png')} />
+                  <View style={styles.image}>
+                     <Image source={require('../../res/images/ic_fpt_is.png')} />
+                  </View>
                   <Text style={styles.textstyle1}>FIS INSIGHT PORTAL</Text>
                   <Image
                      style={{
@@ -184,10 +186,15 @@ export default class Login extends React.Component {
                      }}>
                      <Text style={styles.textlogin}>ĐĂNG NHẬP</Text>
                   </TouchableOpacity>
-                  <Image style={styles.image2} source={require('../../res/images/swipe.png')} />
-                  {/* /////////footer/////////////// */}
-                  {/* <View style={styles.viewFooter}> */}
-                  {/* </View> */}
+                  <View style={styles.image2}>
+                     <Image
+                        style={{
+                           height: Sizes.s160 * 1.8,
+                           resizeMode: 'contain',
+                        }}
+                        source={require('../../res/images/swipe.png')}
+                     />
+                  </View>
                </View>
                <Text style={styles.footer}>Coppyright {'\u00A9'} 2019, FPT Information System</Text>
             </ScrollView>
@@ -210,12 +217,10 @@ const styles = StyleSheet.create({
    },
    image: {
       marginBottom: Sizes.s50,
-      alignSelf: 'center',
+      alignItems: 'center',
    },
    image2: {
-      alignSelf: 'center',
-      height: Sizes.s260,
-      resizeMode: 'contain',
+      alignItems: 'center',
       marginTop: Sizes.s60,
    },
    textstyle1: {

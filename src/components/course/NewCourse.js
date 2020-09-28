@@ -21,7 +21,6 @@ export default class NewCourse extends React.Component {
          endedDate: '',
          buildingId: '',
          roomId: '',
-
          errorInput: false,
       };
    }

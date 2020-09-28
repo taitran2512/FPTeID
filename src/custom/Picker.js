@@ -1,6 +1,6 @@
 import { Sizes } from '@dungdang/react-native-basic';
 import { arrayIsEmpty, stringIsEmpty } from '@dungdang/react-native-basic/src/Functions';
-import React, { Component, useEffect } from 'react';
+import React, { Component } from 'react';
 import {
    Alert,
    FlatList,
@@ -10,7 +10,6 @@ import {
    TouchableOpacity,
    TouchableWithoutFeedback,
    View,
-   Animated,
    Dimensions,
 } from 'react-native';
 import Icon from 'react-native-vector-icons/FontAwesome5';
@@ -27,24 +26,11 @@ export default class Picker extends Component {
    render() {
       const { isShowModal, selectedItem } = this.state;
       const { data, title, style, placeholder, onChangeItem, noDataMessage, value } = this.props;
-      const _animatedSlideUp = new Animated.Value(isShowModal ? 0 : 1);
-      const effects = () => {
-         useEffect(() => {
-            let value = 0;
-            if (isShowModal) {
-               value = 1;
-            }
-            Animated.timing(_animatedSlideUp, {
-               toValue: value,
-               duration: 300,
-               useNativeDriver: false,
-            }).start();
-         }, [isShowModal]);
-      };
       //render item for flatList///////////////////////////////////////////////////////
       const renderItem = ({ item, index }) => {
          return (
             <TouchableOpacity
+               key={index}
                style={styles.item}
                onPress={() => {
                   this.setState({ selectedItem: item, isShowModal: false });
@@ -88,13 +74,13 @@ export default class Picker extends Component {
                   <Icon name="angle-down" size={Sizes.s25} />
                </View>
             </TouchableOpacity>
-            <Modal visible={isShowModal} transparent={true} animationType="none">
+            <Modal visible={isShowModal} transparent={true} animationType="fade">
                <View
                   style={{
                      flex: 1,
-                     justifyContent: 'flex-end',
                      backgroundColor: '#00000036',
-                  }}></View>
+                  }}
+               />
             </Modal>
             <Modal visible={isShowModal} transparent={true} animationType="slide">
                <TouchableWithoutFeedback onPress={() => this.setState({ isShowModal: !isShowModal })}>
