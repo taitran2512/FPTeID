@@ -1,6 +1,6 @@
 import { Sizes } from '@dungdang/react-native-basic';
-import { objectIsNull } from '@dungdang/react-native-basic/src/Functions';
-import React, { Component } from 'react';
+import { arrayIsEmpty, stringIsEmpty } from '@dungdang/react-native-basic/src/Functions';
+import React, { Component, useEffect } from 'react';
 import {
    Alert,
    FlatList,
@@ -10,10 +10,12 @@ import {
    TouchableOpacity,
    TouchableWithoutFeedback,
    View,
+   Animated,
+   Dimensions,
 } from 'react-native';
 import Icon from 'react-native-vector-icons/FontAwesome5';
 
-export default class componentName extends Component {
+export default class Picker extends Component {
    constructor(props) {
       super(props);
       this.state = {
@@ -21,9 +23,25 @@ export default class componentName extends Component {
          selectedItem: null,
       };
    }
+
    render() {
       const { isShowModal, selectedItem } = this.state;
       const { data, title, style, placeholder, onChangeItem, noDataMessage, value } = this.props;
+      const _animatedSlideUp = new Animated.Value(isShowModal ? 0 : 1);
+      const effects = () => {
+         useEffect(() => {
+            let value = 0;
+            if (isShowModal) {
+               value = 1;
+            }
+            Animated.timing(_animatedSlideUp, {
+               toValue: value,
+               duration: 300,
+               useNativeDriver: false,
+            }).start();
+         }, [isShowModal]);
+      };
+      //render item for flatList///////////////////////////////////////////////////////
       const renderItem = ({ item, index }) => {
          return (
             <TouchableOpacity
@@ -45,36 +63,46 @@ export default class componentName extends Component {
             </TouchableOpacity>
          );
       };
+      ///////////////////////////////////////////////////////////////
       return (
-         <TouchableOpacity
-            style={style} 
-            onPress={() => {
-               objectIsNull(data)
-                  ? Alert.alerts('Thông báo', noDataMessage)
-                  : this.setState({ isShowModal: !isShowModal });
-            }}>
-            <View
-               style={{
-                  flexDirection: 'row',
-                  justifyContent: 'space-between',
-                  alignItems: 'center',
-                  paddingHorizontal: Sizes.s15,
+         <View>
+            <TouchableOpacity
+               style={style}
+               onPress={() => {
+                  arrayIsEmpty(data)
+                     ? Alert.alert('Thông báo', noDataMessage)
+                     : this.setState({ isShowModal: !isShowModal });
                }}>
-               {selectedItem === null ? (
-                  <Text style={{ color: '#9f9f9f' }}>{placeholder}</Text>
-               ) : (
-                  <Text style={{ color: '#335272' }}>{selectedItem.label}</Text>
-               )}
-               <Icon name="angle-down" size={Sizes.s25} />
-            </View>
-                  
-            <Modal visible={isShowModal} transparent={true} backdrop={true} animationType="slide">
+               <View
+                  style={{
+                     flexDirection: 'row',
+                     justifyContent: 'space-between',
+                     alignItems: 'center',
+                     paddingHorizontal: Sizes.s15,
+                  }}>
+                  {selectedItem === null || stringIsEmpty(value) ? (
+                     <Text style={{ color: '#9f9f9f' }}>{placeholder}</Text>
+                  ) : (
+                     <Text style={{ color: '#335272' }}>{selectedItem.label}</Text>
+                  )}
+                  <Icon name="angle-down" size={Sizes.s25} />
+               </View>
+            </TouchableOpacity>
+            <Modal visible={isShowModal} transparent={true} animationType="none">
+               <View
+                  style={{
+                     flex: 1,
+                     justifyContent: 'flex-end',
+                     backgroundColor: '#00000036',
+                  }}></View>
+            </Modal>
+            <Modal visible={isShowModal} transparent={true} animationType="slide">
                <TouchableWithoutFeedback onPress={() => this.setState({ isShowModal: !isShowModal })}>
                   <View
                      style={{
                         flex: 1,
                         justifyContent: 'flex-end',
-                        backgroundColor: '#00000036',
+                        // backgroundColor: '#00000036',
                      }}>
                      <TouchableWithoutFeedback>
                         <View
@@ -98,7 +126,7 @@ export default class componentName extends Component {
                   </View>
                </TouchableWithoutFeedback>
             </Modal>
-         </TouchableOpacity>
+         </View>
       );
    }
 }
@@ -109,8 +137,8 @@ const styles = StyleSheet.create({
       fontWeight: 'bold',
       textAlign: 'center',
       paddingVertical: Sizes.s15,
-      borderColor: '#a8a8a8',
-      borderBottomWidth: Sizes.s2 * 0.5,
+      borderColor: '#EFEFEF',
+      borderBottomWidth: Sizes.s2,
    },
    item: {
       // flex: 1,
@@ -118,8 +146,8 @@ const styles = StyleSheet.create({
       justifyContent: 'space-between',
       alignItems: 'center',
       paddingVertical: Sizes.s30,
-      paddingHorizontal: Sizes.s30,
-      borderColor: '#bcbcbc',
-      borderBottomWidth: Sizes.s2 * 0.5,
+      marginHorizontal: Sizes.s30,
+      borderColor: '#EFEFEF',
+      borderBottomWidth: Sizes.s2 * 0.7,
    },
 });

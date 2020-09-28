@@ -77,7 +77,7 @@ export default class NewCourse extends React.Component {
       //tạo mới thành công
       if (prevProps.createCourseReducer !== this.props.createCourseReducer) {
          if (this.props.createCourseReducer.resultCode === 1) {
-            alert(this.props.createCourseReducer.message);
+            Alert.alert(this.props.createCourseReducer.message);
             this.setState({
                courseName: '',
                trainer: '',
@@ -87,7 +87,7 @@ export default class NewCourse extends React.Component {
                roomId: '',
             });
          } else if (this.props.createCourseReducer.resultCode === -1) {
-            alert(this.props.createCourseReducer.message);
+            Alert.alert(this.props.createCourseReducer.message);
          }
       }
    }
@@ -125,7 +125,7 @@ export default class NewCourse extends React.Component {
    }
    showErrorText = (value, message) => {
       if (this.state.errorInput && stringIsEmpty(value)) {
-         return <Text style={{ color: 'red' }}>{message}</Text>;
+         return <Text style={{ color: 'red', fontSize: Sizes.s25 }}>{message}</Text>;
       } else {
          return null;
       }
@@ -186,12 +186,12 @@ export default class NewCourse extends React.Component {
                      Giảng viên <Text style={{ color: 'red' }}>*</Text>
                   </Text>
                   <TextInput
-                     style={[styles.textInput, this.showErrorBorder(this.state.courseName)]}
+                     style={[styles.textInput, this.showErrorBorder(this.state.trainer)]}
                      placeholder="Nhập tên giảng viên"
                      onChangeText={this.handleChangetrainer}
                      value={this.state.trainer}
                   />
-                  {this.showErrorText(this.state.courseName, 'Vui lòng nhập tên giảng viên')}
+                  {this.showErrorText(this.state.trainer, 'Vui lòng nhập tên giảng viên')}
 
                   {/* //////////////////////		 */}
                   <View style={[styles.column, { justifyContent: 'space-between' }]}>
@@ -259,45 +259,40 @@ export default class NewCourse extends React.Component {
                      Tòa nhà <Text style={{ color: 'red' }}>*</Text>
                   </Text>
                   <Picker
-                     style={styles.pickerStyle}
+                     style={[styles.pickerStyle, this.showErrorBorder(this.state.buildingId)]}
                      title={'Tòa nhà'}
                      placeholder={'Chọn tòa nhà'}
+                     value={this.state.buildingId}
                      data={this.state.dataBuilding}
                      onChangeItem={(item) => {
-                        this.setState({ buildingId: item.value });
+                        this.setState({ buildingId: item.value, roomId: '' });
                         this.dropdownRoom(item.label);
                      }}
                   />
-                  {/* <DropDownPicker
-                     items={this.state.dataBuilding}
-                     onChangeItem={(item) => {
-                        this.handleChangebuildingId(item.label, item.value);
-                     }}
-                     labelStyle={styles.textDate}
-                     style={{ borderColor: '#D7DDE3', borderRadius: Sizes.s7 }}
-                     containerStyle={{
-                        height: Sizes.s90,
-                        marginTop: Sizes.s15,
-                        marginBottom: Sizes.s15,
-                     }}
-                  /> */}
-
+                  {this.showErrorText(this.state.buildingId, 'Vui lòng chọn tòa nhà')}
                   {/* /////Phòng/////////////////		 */}
                   <Text style={styles.textstyle}>
                      Phòng <Text style={{ color: 'red' }}>*</Text>
                   </Text>
                   <Picker
-                     style={styles.pickerStyle}
+                     style={[styles.pickerStyle, this.showErrorBorder(this.state.roomId)]}
                      title={'Phòng'}
                      placeholder={'Chọn phòng'}
+                     value={this.state.roomId}
                      data={this.state.dataRoom}
+                     noDataMessage="Vui lòng chọn tòa nhà"
                      onChangeItem={(item) => {
                         this.setState({ roomId: item.value });
                      }}
                   />
+                  {this.showErrorText(this.state.roomId, 'Vui lòng chọn phòng')}
                   {/* /////button Lưu/////////////////		 */}
-                  <TouchableOpacity style={styles.button}>
-                     <Icon solid={true} name="save" color="white" size={Sizes.s35} />
+                  <TouchableOpacity
+                     style={styles.button}
+                     onPress={() => {
+                        this.onPressSaveButton();
+                     }}>
+                     <Icon name="save" color="white" size={Sizes.s35} solid={true} />
                      <Text
                         style={{
                            marginLeft: Sizes.s10,
