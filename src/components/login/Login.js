@@ -1,10 +1,9 @@
 import React, { Component } from 'react';
-import { Button, Image, View, Text, TextInput, StyleSheet, ScrollView, AsyncStorage } from 'react-native';
-import { SafeAreaView } from 'react-navigation';
+import { Image, View, Text, TextInput, StyleSheet, ScrollView, AsyncStorage } from 'react-native';
 import Icon from 'react-native-vector-icons/FontAwesome5';
 import { Sizes } from '@dungdang/react-native-basic';
 import { TouchableOpacity } from 'react-native-gesture-handler';
-
+import SplashScreen from '../../custom/Splash';
 export default class Login extends React.Component {
    constructor(props) {
       super(props);
@@ -16,10 +15,17 @@ export default class Login extends React.Component {
          hidePassword: true,
          check: 'circle',
          pressLogin: false,
+         showLogo: true,
       };
+   }
+   showAnimatedLogo() {
+      setTimeout(() => {
+         this.setState({ showLogo: false });
+      }, 3000);
    }
    componentDidMount() {
       this._retrieveData();
+      this.showAnimatedLogo();
    }
 
    componentDidUpdate(prevProps) {
@@ -84,120 +90,126 @@ export default class Login extends React.Component {
       const { username, password } = this.state;
       return (
          <View style={{ flex: 1, backgroundColor: '#f4f8fb' }}>
-            <ScrollView style={{ flex: 1 }} contentContainerStyle={{ justifyContent: 'center', flexGrow: 1 }}>
-               <View style={styles.container}>
-                  <View style={styles.image}>
-                     <Image source={require('../../res/images/ic_fpt_is.png')} />
-                  </View>
-                  <Text style={styles.textstyle1}>FIS INSIGHT PORTAL</Text>
-                  <Image
-                     style={{
-                        alignSelf: 'center',
-                        height: Sizes.s7,
-                        resizeMode: 'contain',
-                        marginBottom: Sizes.s35,
-                        marginTop: Sizes.s7,
-                     }}
-                     source={require('../../res/images/stripe.png')}
-                  />
-                  <Text style={styles.textstyle2}>ĐĂNG NHẬP HỆ THỐNG</Text>
-                  {/* /////////////username //////////////////////*/}
-                  <View style={styles.textInput}>
-                     <Icon
-                        name="user-alt"
-                        size={Sizes.s35}
-                        color="#b2b2b2"
-                        style={{ marginLeft: Sizes.s20, alignSelf: 'center' }}
-                     />
-                     <TextInput
-                        style={{
-                           // backgroundColor: 'blue',
-                           width: '80%',
-                           height: Sizes.s100,
-                           fontSize: Sizes.s35,
-                           textAlign: 'center',
-                           alignSelf: 'center',
-                        }}
-                        placeholder="Username"
-                        onChangeText={this.handleChangeUsername}
-                        value={username}
-                     />
-                     <Icon style={{ marginRight: 10, width: Sizes.s50, alignSelf: 'center' }} />
-                  </View>
-
-                  {/* /////////////PASSWORD //////////////////////*/}
-                  <View style={[styles.textInput, { justifyContent: 'space-between' }]}>
-                     <Icon
-                        name="lock"
-                        size={Sizes.s35}
-                        color="#b2b2b2"
-                        style={{ marginLeft: Sizes.s20, alignSelf: 'center' }}
-                     />
-                     <TextInput
-                        style={{
-                           fontSize: Sizes.s35,
-                           width: '80%',
-                           height: Sizes.s100,
-                           textAlign: 'center',
-                           alignSelf: 'center',
-                        }}
-                        secureTextEntry={this.state.hidePassword}
-                        placeholder="Password"
-                        onChangeText={this.handleChangePassword}
-                        value={password}
-                     />
-                     <Icon
-                        name={this.state.iconName}
-                        size={Sizes.s35}
-                        color="#b2b2b2"
-                        style={{ marginRight: 10, width: Sizes.s50, alignSelf: 'center' }}
-                        onPress={() => {
-                           if (this.state.iconName === 'eye') {
-                              this.setState({ hidePassword: true });
-                              this.setState({ iconName: 'eye-slash' });
-                           } else {
-                              this.setState({ iconName: 'eye' });
-                              this.setState({ hidePassword: false });
-                           }
-                        }}
-                     />
-                  </View>
-                  {/* ////////checkbox/////////////////////////// */}
-                  <TouchableOpacity
-                     style={styles.checkContainer}
-                     activeOpacity={0.5}
-                     onPress={() => {
-                        if (this.state.check === 'circle') {
-                           this.setState({ check: 'check-circle' });
-                        } else {
-                           this.setState({ check: 'circle' });
-                        }
-                     }}>
-                     <Icon name={this.state.check} size={20} color="#fb9334" style={{ marginTop: 2 }} />
-                     <Text style={styles.textstyle3}>Ghi nhớ đăng nhập</Text>
-                  </TouchableOpacity>
-
-                  {/* ////////button login/////////////////////// */}
-                  <TouchableOpacity
-                     activeOpacity={0.5}
-                     style={styles.button}
-                     onPress={() => {
-                        this._onPressLogin();
-                     }}>
-                     <Text style={styles.textlogin}>ĐĂNG NHẬP</Text>
-                  </TouchableOpacity>
-                  <View style={styles.image2}>
+            {this.state.showLogo ? (
+               <SplashScreen />
+            ) : (
+               <ScrollView
+                  style={{ flex: 1 }}
+                  contentContainerStyle={{ justifyContent: 'center', flexGrow: 1 }}>
+                  <View style={styles.container}>
+                     <View style={styles.image}>
+                        <Image source={require('../../res/images/ic_fpt_is.png')} />
+                     </View>
+                     <Text style={styles.textstyle1}>FIS INSIGHT PORTAL</Text>
                      <Image
                         style={{
-                           height: Sizes.s160 * 1.8,
+                           alignSelf: 'center',
+                           height: Sizes.s7,
                            resizeMode: 'contain',
+                           marginBottom: Sizes.s35,
+                           marginTop: Sizes.s7,
                         }}
-                        source={require('../../res/images/swipe.png')}
+                        source={require('../../res/images/stripe.png')}
                      />
+                     <Text style={styles.textstyle2}>ĐĂNG NHẬP HỆ THỐNG</Text>
+                     {/* /////////////username //////////////////////*/}
+                     <View style={styles.textInput}>
+                        <Icon
+                           name="user-alt"
+                           size={Sizes.s35}
+                           color="#b2b2b2"
+                           style={{ marginLeft: Sizes.s20, alignSelf: 'center' }}
+                        />
+                        <TextInput
+                           style={{
+                              // backgroundColor: 'blue',
+                              width: '80%',
+                              height: Sizes.s100,
+                              fontSize: Sizes.s35,
+                              textAlign: 'center',
+                              alignSelf: 'center',
+                           }}
+                           placeholder="Username"
+                           onChangeText={this.handleChangeUsername}
+                           value={username}
+                        />
+                        <Icon style={{ marginRight: 10, width: Sizes.s50, alignSelf: 'center' }} />
+                     </View>
+
+                     {/* /////////////PASSWORD //////////////////////*/}
+                     <View style={[styles.textInput, { justifyContent: 'space-between' }]}>
+                        <Icon
+                           name="lock"
+                           size={Sizes.s35}
+                           color="#b2b2b2"
+                           style={{ marginLeft: Sizes.s20, alignSelf: 'center' }}
+                        />
+                        <TextInput
+                           style={{
+                              fontSize: Sizes.s35,
+                              width: '80%',
+                              height: Sizes.s100,
+                              textAlign: 'center',
+                              alignSelf: 'center',
+                           }}
+                           secureTextEntry={this.state.hidePassword}
+                           placeholder="Password"
+                           onChangeText={this.handleChangePassword}
+                           value={password}
+                        />
+                        <Icon
+                           name={this.state.iconName}
+                           size={Sizes.s35}
+                           color="#b2b2b2"
+                           style={{ marginRight: 10, width: Sizes.s50, alignSelf: 'center' }}
+                           onPress={() => {
+                              if (this.state.iconName === 'eye') {
+                                 this.setState({ hidePassword: true });
+                                 this.setState({ iconName: 'eye-slash' });
+                              } else {
+                                 this.setState({ iconName: 'eye' });
+                                 this.setState({ hidePassword: false });
+                              }
+                           }}
+                        />
+                     </View>
+                     {/* ////////checkbox/////////////////////////// */}
+                     <TouchableOpacity
+                        style={styles.checkContainer}
+                        activeOpacity={0.5}
+                        onPress={() => {
+                           if (this.state.check === 'circle') {
+                              this.setState({ check: 'check-circle' });
+                           } else {
+                              this.setState({ check: 'circle' });
+                           }
+                        }}>
+                        <Icon name={this.state.check} size={20} color="#fb9334" style={{ marginTop: 2 }} />
+                        <Text style={styles.textstyle3}>Ghi nhớ đăng nhập</Text>
+                     </TouchableOpacity>
+
+                     {/* ////////button login/////////////////////// */}
+                     <TouchableOpacity
+                        activeOpacity={0.5}
+                        style={styles.button}
+                        onPress={() => {
+                           this._onPressLogin();
+                        }}>
+                        <Text style={styles.textlogin}>ĐĂNG NHẬP</Text>
+                     </TouchableOpacity>
+                     <View style={styles.image2}>
+                        <Image
+                           style={{
+                              height: Sizes.s160 * 1.8,
+                              resizeMode: 'contain',
+                           }}
+                           source={require('../../res/images/swipe.png')}
+                        />
+                     </View>
                   </View>
-               </View>
-               <Text style={styles.footer}>Coppyright {'\u00A9'} 2019, FPT Information System</Text>
-            </ScrollView>
+                  <Text style={styles.footer}>Coppyright {'\u00A9'} 2019, FPT Information System</Text>
+               </ScrollView>
+            )}
          </View>
       );
    }

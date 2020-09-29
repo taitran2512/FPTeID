@@ -107,14 +107,6 @@ export default class NewCourse extends React.Component {
    handleChangetrainer = (trainer) => {
       this.setState({ trainer: trainer });
    };
-   //get start date
-   handleChangestartedDate = (startedDate) => {
-      this.setState({ startedDate: startedDate });
-   };
-   //get end date
-   handleChangeendedDate = (endedDate) => {
-      this.setState({ endedDate: endedDate });
-   };
    //valid date
    betweenDate() {
       return (
@@ -122,6 +114,18 @@ export default class NewCourse extends React.Component {
          new Date(this.state.startedDate.split('-').reverse().join('/')).getDay()
       );
    }
+   //get start date
+   handleChangestartedDate = (startedDate) => {
+      this.setState({ startedDate: startedDate });
+   };
+   //get end date
+   handleChangeendedDate = async (endedDate) => {
+      await this.setState({ endedDate: endedDate });
+      this.betweenDate() < 0
+         ? (Alert.alert('Thông báo', 'Ngày tháng không hợp lệ'), this.setState({ endedDate: '' }))
+         : null;
+   };
+
    showErrorText = (value, message) => {
       if (this.state.errorInput && stringIsEmpty(value)) {
          return <Text style={{ color: 'red', fontSize: Sizes.s25 }}>{message}</Text>;
@@ -145,19 +149,15 @@ export default class NewCourse extends React.Component {
       ) {
          this.setState({ errorInput: true });
       } else {
-         if (this.betweenDate() < 0) {
-            Alert.alert('Thông báo', 'Ngày tháng không hợp lệ');
-         } else {
-            this.setState({ errorInput: false });
-            this.props.createCourseAction(
-               this.state.courseName,
-               this.state.trainer,
-               this.state.startedDate.split('-').reverse().join('-'),
-               this.state.endedDate.split('-').reverse().join('-'),
-               this.state.buildingId,
-               this.state.roomId,
-            );
-         }
+         this.setState({ errorInput: false });
+         this.props.createCourseAction(
+            this.state.courseName,
+            this.state.trainer,
+            this.state.startedDate.split('-').reverse().join('-'),
+            this.state.endedDate.split('-').reverse().join('-'),
+            this.state.buildingId,
+            this.state.roomId,
+         );
       }
    };
    render() {
