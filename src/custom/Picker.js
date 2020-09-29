@@ -85,7 +85,7 @@ export default class Picker extends Component {
                   <Icon name="angle-down" size={Sizes.s25} />
                </View>
             </TouchableOpacity>
-            <Modal visible={isShowModal} transparent={true} animationType="none">
+            <Modal visible={isShowModal} transparent={true} animationType="fade">
                <View
                   style={{
                      flex: 1,
@@ -108,6 +108,7 @@ export default class Picker extends Component {
                            <FlatList
                               style={{ flex: 1 }}
                               data={data}
+                              key={(index) => index}
                               showsVerticalScrollIndicator={false}
                               keyExtractor={(index) => index}
                               renderItem={(item, index) => renderItem(item, index)}
