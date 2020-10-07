@@ -10,11 +10,10 @@ import {
    TouchableOpacity,
    TouchableWithoutFeedback,
    View,
-   Dimensions,
 } from 'react-native';
 import Icon from 'react-native-vector-icons/FontAwesome5';
 
-export default class Picker extends Component {
+class Picker extends Component {
    constructor(props) {
       super(props);
       this.state = {
@@ -48,13 +47,13 @@ export default class Picker extends Component {
                }}>
                <Text
                   style={[
-                     { fontSize: Sizes.s30 },
+                     { fontSize: Sizes.s35 },
                      selectedItem === item ? { fontWeight: 'bold', color: '#0294e1' } : null,
                   ]}>
                   {item.label}
                </Text>
                {selectedItem === item ? (
-                  <Icon solid color={'#0294e1'} size={Sizes.s30} name={'check-circle'} />
+                  <Icon solid color={'#0294e1'} size={Sizes.s40} name={'check-circle'} />
                ) : null}
             </TouchableOpacity>
          );
@@ -103,7 +102,7 @@ export default class Picker extends Component {
                      <TouchableWithoutFeedback>
                         {/*//truyền modalStyle tùy biến cho modal */}
                         <View style={[styles.modal, modalStyle]}>
-                           {/* //title = null sẽ không hiển thị lên modal */}
+                           {/* //title = null sẽ không hiển thị trên modal */}
                            {!stringIsEmpty(title) ? <Text style={styles.title}>{title}</Text> : null}
                            <FlatList
                               style={{ flex: 1 }}
@@ -122,6 +121,11 @@ export default class Picker extends Component {
       );
    }
 }
+Picker.defaultProps = {
+   position: 'flex-end',
+   noDataMessage: 'Không có dữ liệu',
+};
+export default Picker;
 
 const styles = StyleSheet.create({
    title: {

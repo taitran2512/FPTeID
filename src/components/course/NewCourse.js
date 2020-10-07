@@ -258,7 +258,6 @@ export default class NewCourse extends React.Component {
                      Tòa nhà <Text style={{ color: 'red' }}>*</Text>
                   </Text>
                   <Picker
-                     position={'flex-end'}
                      style={this.showErrorBorder(this.state.buildingId)}
                      title={'Tòa nhà'}
                      placeholder={'Chọn tòa nhà'}
@@ -275,7 +274,6 @@ export default class NewCourse extends React.Component {
                      Phòng <Text style={{ color: 'red' }}>*</Text>
                   </Text>
                   <Picker
-                     position={'flex-end'}
                      style={this.showErrorBorder(this.state.roomId)}
                      title={'Phòng'}
                      placeholder={'Chọn phòng'}
