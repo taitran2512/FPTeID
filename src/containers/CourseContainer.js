@@ -7,6 +7,7 @@ import ManageCourse from '../components/course/ManageCourse';
 const mapStateToProps = (state) => {
    return {
       courseReducer: state.courseReducers,
+      
    };
 };
 

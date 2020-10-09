@@ -1,4 +1,4 @@
-import { Text, View, ScrollView, FlatList, TouchableOpacity } from 'react-native';
+import { Text, View, ActivityIndicator, FlatList, TouchableOpacity } from 'react-native';
 import React from 'react';
 
 import Header2Icon from '../../custom/Header2Icon';
@@ -29,29 +29,31 @@ export default class ManageCourse extends React.Component {
    componentDidMount() {
       this.props.getCourseAction();
    }
-   componentDidUpdate(prevProps) {
+   async componentDidUpdate(prevProps) {
       if (prevProps.courseReducer !== this.props.courseReducer) {
          if (!objectIsNull(this.props.courseReducer)) {
             if (!arrayIsEmpty(this.props.courseReducer.data)) {
                // console.log(this.props.courseReducer.data)
-               this.setState({ datafromServer: this.props.courseReducer.data });
+               await this.setState({ datafromServer: this.props.courseReducer.data });
+               await this.setState({ refreshing: false });
             }
          }
       }
    }
 
-   handleRefresh() {
+   async handleRefresh() {
       this.setState({ refreshing: true });
       this.props.getCourseAction();
-      this.setState({
-         datafromServer: this.props.courseReducer.data,
-         refreshing: false,
-      });
+      // await this.setState({
+      //    datafromServer: this.props.courseReducer.data,
+      // });
+      // await this.setState({ refreshing: false });
    }
 
    render() {
-      const renderItem = ({ item }) => (
+      const renderItem = ({ item, index }) => (
          <TouchableOpacity
+            key={index}
             activeOpacity={0.8}
             onPress={() => {
                this.props.navigation.navigate('CourseDay', {
@@ -88,15 +90,21 @@ export default class ManageCourse extends React.Component {
             />
 
             {/* ////////////////////////////////////////////////// */}
-            <View style={{ flex: 1 }}>
-               <FlatList
-                  data={this.state.datafromServer}
-                  renderItem={renderItem}
-                  keyExtractor={(item) => item.course_id}
-                  onRefresh={() => this.handleRefresh()}
-                  refreshing={this.state.refreshing}
-               />
-            </View>
+            {arrayIsEmpty(this.state.datafromServer) ? (
+               <View style={{ flex: 1, justifyContent: 'center', alignItems: 'center' }}>
+                  <ActivityIndicator size="large" />
+               </View>
+            ) : (
+               <View style={{ flex: 1 }}>
+                  <FlatList
+                     data={this.state.datafromServer}
+                     renderItem={renderItem}
+                     keyExtractor={(item) => item.course_id}
+                     onRefresh={() => this.handleRefresh()}
+                     refreshing={this.state.refreshing}
+                  />
+               </View>
+            )}
          </View>
       );
    }

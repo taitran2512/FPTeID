@@ -256,7 +256,7 @@ const styles = StyleSheet.create({
    textInput: {
       flexDirection: 'row',
       justifyContent: 'space-between',
-      backgroundColor: '#d7dde3',
+      backgroundColor: '#ebebeb',
       height: Sizes.s80,
       width: '80%',
       alignSelf: 'center',
